@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dojos and Ninjas</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="forms">
+            <div class="box">
+                <h1>Add a Dojo:</h1>
+                <form action="/dojo" method="post">
+                    {% csrf_token %}
+                    <div class="spaces">Name: <input type="text" name="name"></div><br>
+                    <div class="spaces">City: <input type="text" name="city"></div><br>
+                    <div class="spaces">State: <input type="text" name="state"></div><br>
+                    <input type="submit" id="done" value="Add">
+                </form>
+            </div>
+            <div class="box">
+                <h1>Add a Ninja:</h1>
+                <form action="/ninja" method="post">
+                    {% csrf_token %}
+                    <div class="spaces">Your first name: <input type="text" name="first_name"></div><br>
+                    <div class="spaces">Your last name: <input type="text" name="last_name"></div><br>
+                    <div class="spaces"> Dojo location:
+                        <input list="dojo" name="location">
+                        <datalist id="dojo">
+                            {% for dojo in all_the_dojos %} <option value="{{dojo.name}}"></option> {% endfor %}
+                        </datalist>
+                    </div><br>
+                    <input type="submit" id="done" value="Add">
+                </form>
+            </div>
+        </div>
+        <div id="line"></div>
+        <div id="dojolist">
+            <h1>All the Dojos</h1>
+            {% for dojo in all_the_dojos %}
+            <br>
+            <ul>
+                {{ dojo.name }} <br><br>
+                {% for ninja in dojo.school_ninjas.all %} 
+                    <li> {{ ninja.first_name }} {{ ninja.last_name }} </li>
+                {% endfor %}
+            </ul>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+
+</html>
